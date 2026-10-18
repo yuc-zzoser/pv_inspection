@@ -1,3 +1,6 @@
+VERSION DE LA APLICACIÓN: 0.4.1
+FECHA DE ACTUALIZACIÓN: 18.10.2026
+
 PV INSPECTION – VERSIÓN PWA PARA IPHONE
 
 1. Sube el contenido de este paquete (no el ZIP) a la raíz de un proyecto GitLab.
