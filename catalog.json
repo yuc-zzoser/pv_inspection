@@ -1,0 +1,639 @@
+{
+  "version": "1.0",
+  "areas": [
+    {
+      "id": "grid",
+      "de": "Netzübergabe / NA-Schutz",
+      "en": "Grid connection / protection"
+    },
+    {
+      "id": "trafo",
+      "de": "Transformator",
+      "en": "Transformer"
+    },
+    {
+      "id": "ac",
+      "de": "AC-Anlage",
+      "en": "AC installation"
+    },
+    {
+      "id": "wr",
+      "de": "Wechselrichter",
+      "en": "Inverters"
+    },
+    {
+      "id": "dc",
+      "de": "DC-Verkabelung & GAK",
+      "en": "DC cabling & combiner boxes"
+    },
+    {
+      "id": "modules",
+      "de": "PV-Module",
+      "en": "PV modules"
+    },
+    {
+      "id": "mount",
+      "de": "Unterkonstruktion",
+      "en": "Mounting structure"
+    },
+    {
+      "id": "monitor",
+      "de": "Monitoring",
+      "en": "Monitoring"
+    },
+    {
+      "id": "performance",
+      "de": "Performance",
+      "en": "Performance"
+    },
+    {
+      "id": "docs",
+      "de": "Dokumentation & Betrieb",
+      "en": "Documentation & O&M"
+    },
+    {
+      "id": "storage",
+      "de": "Batteriespeicher",
+      "en": "Battery storage"
+    },
+    {
+      "id": "fpv",
+      "de": "Floating PV",
+      "en": "Floating PV"
+    },
+    {
+      "id": "apv",
+      "de": "Agri-PV",
+      "en": "Agrivoltaics"
+    }
+  ],
+  "checks": [
+    {
+      "id": "GRID-001",
+      "area": "grid",
+      "de": "Anschlusspunkt / Netzebene",
+      "en": "PCC and voltage level",
+      "method_de": "PCC mit Anschlusszusage vergleichen",
+      "method_en": "Compare PCC to connection agreement",
+      "condition": ""
+    },
+    {
+      "id": "GRID-002",
+      "area": "grid",
+      "de": "NA-Schutzparameter",
+      "en": "Grid protection parameters",
+      "method_de": "Prüfbericht gegen freigegebene Parameter vergleichen",
+      "method_en": "Compare tests to approved settings",
+      "condition": ""
+    },
+    {
+      "id": "GRID-003",
+      "area": "grid",
+      "de": "Kuppelschalter",
+      "en": "Interface switch",
+      "method_de": "Funktionsnachweis prüfen",
+      "method_en": "Check switching test evidence",
+      "condition": ""
+    },
+    {
+      "id": "GRID-004",
+      "area": "grid",
+      "de": "Messkonzept",
+      "en": "Metering concept",
+      "method_de": "Zählerkennung und Messrichtung prüfen",
+      "method_en": "Check meter ID and direction",
+      "condition": ""
+    },
+    {
+      "id": "GRID-005",
+      "area": "grid",
+      "de": "Fernsteuerbarkeit",
+      "en": "Remote controllability",
+      "method_de": "Freigaben und Signalliste prüfen",
+      "method_en": "Check signal test and approval",
+      "condition": ""
+    },
+    {
+      "id": "TRAFO-001",
+      "area": "trafo",
+      "de": "Typenschild",
+      "en": "Nameplate",
+      "method_de": "Bemessungsdaten vergleichen",
+      "method_en": "Compare electrical ratings",
+      "condition": ""
+    },
+    {
+      "id": "TRAFO-002",
+      "area": "trafo",
+      "de": "Ölverlust / Auffangraum",
+      "en": "Oil leak / containment",
+      "method_de": "Leckage und Auffangraum prüfen",
+      "method_en": "Inspect leakage and containment",
+      "condition": ""
+    },
+    {
+      "id": "TRAFO-003",
+      "area": "trafo",
+      "de": "Erdung",
+      "en": "Earthing",
+      "method_de": "Erdungsnachweis und Anschlüsse kontrollieren",
+      "method_en": "Check earth records and bonds",
+      "condition": ""
+    },
+    {
+      "id": "TRAFO-004",
+      "area": "trafo",
+      "de": "Schutzrelais",
+      "en": "Protection relay",
+      "method_de": "Parameter und Auslösebericht kontrollieren",
+      "method_en": "Check settings and trip records",
+      "condition": ""
+    },
+    {
+      "id": "AC-001",
+      "area": "ac",
+      "de": "AC-Verkabelung",
+      "en": "AC cabling",
+      "method_de": "Trassen und mechanischen Schutz prüfen",
+      "method_en": "Inspect routes and protection",
+      "condition": ""
+    },
+    {
+      "id": "AC-002",
+      "area": "ac",
+      "de": "AC-Verteilung",
+      "en": "AC switchboard",
+      "method_de": "Gehäuse und Kennzeichnung prüfen",
+      "method_en": "Inspect enclosure and labels",
+      "condition": ""
+    },
+    {
+      "id": "AC-003",
+      "area": "ac",
+      "de": "Schutzleiterkontinuität",
+      "en": "PE continuity",
+      "method_de": "Messprotokoll verifizieren",
+      "method_en": "Verify continuity test",
+      "condition": ""
+    },
+    {
+      "id": "AC-004",
+      "area": "ac",
+      "de": "Überspannungsschutz",
+      "en": "Surge protection",
+      "method_de": "SPD-Ausführung und Status prüfen",
+      "method_en": "Inspect SPD installation and status",
+      "condition": ""
+    },
+    {
+      "id": "WR-001",
+      "area": "wr",
+      "de": "Typ und Nennleistung",
+      "en": "Type and rating",
+      "method_de": "Typenschild mit Planung vergleichen",
+      "method_en": "Check nameplate against design",
+      "condition": ""
+    },
+    {
+      "id": "WR-002",
+      "area": "wr",
+      "de": "Länderdatensatz",
+      "en": "Grid profile",
+      "method_de": "Einstellwerte gegen VNB-Freigabe prüfen",
+      "method_en": "Review settings against DSO approval",
+      "condition": ""
+    },
+    {
+      "id": "WR-003",
+      "area": "wr",
+      "de": "Kühlung",
+      "en": "Cooling",
+      "method_de": "Belüftungswege und Alarmhistorie prüfen",
+      "method_en": "Check ventilation and alarms",
+      "condition": ""
+    },
+    {
+      "id": "WR-004",
+      "area": "wr",
+      "de": "MPPT-Betrieb",
+      "en": "MPPT operation",
+      "method_de": "Kennlinien und Trends vergleichen",
+      "method_en": "Compare MPPT trends",
+      "condition": ""
+    },
+    {
+      "id": "WR-005",
+      "area": "wr",
+      "de": "Stationszugang",
+      "en": "Station access",
+      "method_de": "Zugang und Verriegelung prüfen",
+      "method_en": "Check access and interlocks",
+      "condition": ""
+    },
+    {
+      "id": "DC-001",
+      "area": "dc",
+      "de": "Leitungsführung",
+      "en": "Cable routing",
+      "method_de": "Befestigung und Scheuerstellen prüfen",
+      "method_en": "Check supports and abrasion",
+      "condition": ""
+    },
+    {
+      "id": "DC-002",
+      "area": "dc",
+      "de": "Steckverbinderpaarung",
+      "en": "Connector mating",
+      "method_de": "Herstellerkompatibilität prüfen",
+      "method_en": "Verify OEM-compatible connectors",
+      "condition": ""
+    },
+    {
+      "id": "DC-003",
+      "area": "dc",
+      "de": "GAK-Gehäuse",
+      "en": "Combiner box enclosure",
+      "method_de": "Dichtheit, Zustand und Beschriftung prüfen",
+      "method_en": "Inspect sealing and labeling",
+      "condition": ""
+    },
+    {
+      "id": "DC-004",
+      "area": "dc",
+      "de": "String-Sicherungen",
+      "en": "String fuses",
+      "method_de": "Bemessung gegen Schutzkonzept prüfen",
+      "method_en": "Check ratings against protection design",
+      "condition": ""
+    },
+    {
+      "id": "DC-005",
+      "area": "dc",
+      "de": "Isolationswiderstand DC-Anlage",
+      "en": "Array DC insulation",
+      "method_de": "Protokoll der Anlagenmessung prüfen",
+      "method_en": "Review installed-system insulation test",
+      "condition": ""
+    },
+    {
+      "id": "MODULES-001",
+      "area": "modules",
+      "de": "Glasbruch",
+      "en": "Broken glass",
+      "method_de": "Modulglas visuell prüfen",
+      "method_en": "Visually inspect module glazing",
+      "condition": ""
+    },
+    {
+      "id": "MODULES-002",
+      "area": "modules",
+      "de": "Rahmenbeschädigung",
+      "en": "Frame damage",
+      "method_de": "Verformungen und Brüche prüfen",
+      "method_en": "Inspect deformation and fractures",
+      "condition": ""
+    },
+    {
+      "id": "MODULES-003",
+      "area": "modules",
+      "de": "Modulklemmen",
+      "en": "Module clamps",
+      "method_de": "Klemmbereich und Befestigung prüfen",
+      "method_en": "Check clamp position and security",
+      "condition": ""
+    },
+    {
+      "id": "MODULES-004",
+      "area": "modules",
+      "de": "Modulverschmutzung",
+      "en": "Module soiling",
+      "method_de": "Art und Verteilung erfassen",
+      "method_en": "Record extent and distribution",
+      "condition": ""
+    },
+    {
+      "id": "MODULES-005",
+      "area": "modules",
+      "de": "Rückseitige Beschädigung",
+      "en": "Rear-side damage",
+      "method_de": "Rückseite auf Defekte prüfen",
+      "method_en": "Inspect module rear for defects",
+      "condition": "bifacial"
+    },
+    {
+      "id": "MODULES-006",
+      "area": "modules",
+      "de": "Rückseitige Abschattung",
+      "en": "Rear-side shading",
+      "method_de": "Verschattung durch Träger und Leitungen prüfen",
+      "method_en": "Inspect rear obstruction",
+      "condition": "bifacial"
+    },
+    {
+      "id": "MOUNT-001",
+      "area": "mount",
+      "de": "Schraubverbindungen",
+      "en": "Bolted connections",
+      "method_de": "Verbindungen und Montageprotokolle prüfen",
+      "method_en": "Check joints and installation records",
+      "condition": ""
+    },
+    {
+      "id": "MOUNT-002",
+      "area": "mount",
+      "de": "Korrosion",
+      "en": "Corrosion",
+      "method_de": "Beschichtungen und Kontaktstellen prüfen",
+      "method_en": "Inspect coating and joints",
+      "condition": ""
+    },
+    {
+      "id": "MOUNT-003",
+      "area": "mount",
+      "de": "Gründung / Dachbefestigung",
+      "en": "Foundations / roof interfaces",
+      "method_de": "Setzung und Befestigungsdetails prüfen",
+      "method_en": "Inspect settlement and attachment",
+      "condition": ""
+    },
+    {
+      "id": "MOUNT-004",
+      "area": "mount",
+      "de": "Tracker-Endlagen",
+      "en": "Tracker end positions",
+      "method_de": "Funktion und Endlagen prüfen",
+      "method_en": "Verify movement and endpoints",
+      "condition": "tracker"
+    },
+    {
+      "id": "MOUNT-005",
+      "area": "mount",
+      "de": "Tracker-Stow-Funktion",
+      "en": "Tracker stow function",
+      "method_de": "Wind- und Schutzfunktion anhand Protokoll prüfen",
+      "method_en": "Review wind protection behavior",
+      "condition": "tracker"
+    },
+    {
+      "id": "MONITOR-001",
+      "area": "monitor",
+      "de": "SCADA-Geräteabdeckung",
+      "en": "SCADA device coverage",
+      "method_de": "Erwartete und gemeldete Geräte vergleichen",
+      "method_en": "Compare reported vs expected assets",
+      "condition": ""
+    },
+    {
+      "id": "MONITOR-002",
+      "area": "monitor",
+      "de": "Zeitsynchronisierung",
+      "en": "Time synchronization",
+      "method_de": "Systemzeiten und Zeitzonen vergleichen",
+      "method_en": "Compare time and timezone",
+      "condition": ""
+    },
+    {
+      "id": "MONITOR-003",
+      "area": "monitor",
+      "de": "Einstrahlungssensorik",
+      "en": "Irradiance measurement",
+      "method_de": "Lage und Kalibrierung prüfen",
+      "method_en": "Review installation and calibration",
+      "condition": ""
+    },
+    {
+      "id": "MONITOR-004",
+      "area": "monitor",
+      "de": "Rückseitige Einstrahlung",
+      "en": "Rear irradiance",
+      "method_de": "Messung und Sensorlage prüfen",
+      "method_en": "Check rear-facing sensor and location",
+      "condition": "bifacial"
+    },
+    {
+      "id": "MONITOR-005",
+      "area": "monitor",
+      "de": "Albedo",
+      "en": "Albedo",
+      "method_de": "Messmethode und Daten plausibilisieren",
+      "method_en": "Validate measurement method and data",
+      "condition": "bifacial"
+    },
+    {
+      "id": "MONITOR-006",
+      "area": "monitor",
+      "de": "Datenlücken",
+      "en": "Data gaps",
+      "method_de": "Messreihen auf Vollständigkeit prüfen",
+      "method_en": "Inspect completeness of time series",
+      "condition": ""
+    },
+    {
+      "id": "PERFORMANCE-001",
+      "area": "performance",
+      "de": "Stringvergleich",
+      "en": "String comparison",
+      "method_de": "Leistungsdaten normiert vergleichen",
+      "method_en": "Compare normalized string outputs",
+      "condition": ""
+    },
+    {
+      "id": "PERFORMANCE-002",
+      "area": "performance",
+      "de": "Thermografie",
+      "en": "Thermography",
+      "method_de": "Wetter-, Last- und Messbedingungen dokumentieren",
+      "method_en": "Record irradiance, load and imaging conditions",
+      "condition": ""
+    },
+    {
+      "id": "PERFORMANCE-003",
+      "area": "performance",
+      "de": "I–V-Kennlinie",
+      "en": "I–V tracing",
+      "method_de": "Gemessene Kennlinie gegen Modell prüfen",
+      "method_en": "Compare traced curve to model",
+      "condition": ""
+    },
+    {
+      "id": "PERFORMANCE-004",
+      "area": "performance",
+      "de": "Verfügbarkeit",
+      "en": "Availability",
+      "method_de": "Ausfallzeiten nach KPI-Definition prüfen",
+      "method_en": "Review downtime against KPI",
+      "condition": ""
+    },
+    {
+      "id": "PERFORMANCE-005",
+      "area": "performance",
+      "de": "Bifazialer Mehrertrag",
+      "en": "Bifacial gain",
+      "method_de": "Modell und Rückseitendaten abgleichen",
+      "method_en": "Compare performance model and rear data",
+      "condition": "bifacial"
+    },
+    {
+      "id": "DOCS-001",
+      "area": "docs",
+      "de": "Bestandspläne",
+      "en": "As-built drawings",
+      "method_de": "Revisionsstand prüfen",
+      "method_en": "Verify current revisions",
+      "condition": ""
+    },
+    {
+      "id": "DOCS-002",
+      "area": "docs",
+      "de": "Inbetriebsetzung",
+      "en": "Commissioning records",
+      "method_de": "Vollständigkeit und Fehler prüfen",
+      "method_en": "Review tests and deficiencies",
+      "condition": ""
+    },
+    {
+      "id": "DOCS-003",
+      "area": "docs",
+      "de": "MaStR-Registrierung",
+      "en": "MaStR registration",
+      "method_de": "Registrierungsnachweis prüfen",
+      "method_en": "Inspect registration evidence",
+      "condition": ""
+    },
+    {
+      "id": "DOCS-004",
+      "area": "docs",
+      "de": "Wartungsplan",
+      "en": "Maintenance plan",
+      "method_de": "Zuständigkeit und Intervalle prüfen",
+      "method_en": "Review intervals and responsibilities",
+      "condition": ""
+    },
+    {
+      "id": "DOCS-005",
+      "area": "docs",
+      "de": "Notfallplan",
+      "en": "Emergency plan",
+      "method_de": "Aktualität und Zugänglichkeit prüfen",
+      "method_en": "Check validity and access",
+      "condition": ""
+    },
+    {
+      "id": "STORAGE-001",
+      "area": "storage",
+      "de": "BMS-Alarme",
+      "en": "BMS alarms",
+      "method_de": "Alarmhistorie prüfen",
+      "method_en": "Review alarms",
+      "condition": ""
+    },
+    {
+      "id": "STORAGE-002",
+      "area": "storage",
+      "de": "Sicherheitsabstände",
+      "en": "Safety clearances",
+      "method_de": "OEM-Vorgaben prüfen",
+      "method_en": "Verify OEM specifications",
+      "condition": ""
+    },
+    {
+      "id": "STORAGE-003",
+      "area": "storage",
+      "de": "EMS-Regelung",
+      "en": "EMS controls",
+      "method_de": "PCC-Vorgaben prüfen",
+      "method_en": "Review PCC control requirements",
+      "condition": ""
+    },
+    {
+      "id": "FPV-001",
+      "area": "fpv",
+      "de": "Schwimmkörper",
+      "en": "Floats",
+      "method_de": "Schäden und Freibord prüfen",
+      "method_en": "Inspect floats and freeboard",
+      "condition": ""
+    },
+    {
+      "id": "FPV-002",
+      "area": "fpv",
+      "de": "Mooring",
+      "en": "Mooring",
+      "method_de": "Leinen, Befestigung und Bewegung prüfen",
+      "method_en": "Inspect anchors and movement",
+      "condition": ""
+    },
+    {
+      "id": "FPV-003",
+      "area": "fpv",
+      "de": "Uferanschluss",
+      "en": "Shore connection",
+      "method_de": "Kabelbewegung und Schutz prüfen",
+      "method_en": "Inspect shore cable protection",
+      "condition": ""
+    },
+    {
+      "id": "FPV-004",
+      "area": "fpv",
+      "de": "Rettung",
+      "en": "Rescue readiness",
+      "method_de": "Rettungsmittel und Zugang prüfen",
+      "method_en": "Check rescue kit and access",
+      "condition": ""
+    },
+    {
+      "id": "FPV-005",
+      "area": "fpv",
+      "de": "Wasserrecht",
+      "en": "Water permit",
+      "method_de": "Auflagen nachweisen",
+      "method_en": "Verify site-specific conditions",
+      "condition": ""
+    },
+    {
+      "id": "APV-001",
+      "area": "apv",
+      "de": "Maschinendurchfahrt",
+      "en": "Machinery clearance",
+      "method_de": "Abstände messen",
+      "method_en": "Measure clearance",
+      "condition": ""
+    },
+    {
+      "id": "APV-002",
+      "area": "apv",
+      "de": "Wendeflächen",
+      "en": "Turning areas",
+      "method_de": "Maschinengeometrie prüfen",
+      "method_en": "Check turning space",
+      "condition": ""
+    },
+    {
+      "id": "APV-003",
+      "area": "apv",
+      "de": "Bodenschutz",
+      "en": "Soil protection",
+      "method_de": "Verdichtung und Erosion prüfen",
+      "method_en": "Inspect compaction and erosion",
+      "condition": ""
+    },
+    {
+      "id": "APV-004",
+      "area": "apv",
+      "de": "Landwirtschaftliche Nutzung",
+      "en": "Agricultural use",
+      "method_de": "Nutzungsnachweis prüfen",
+      "method_en": "Review cropping/grazing records",
+      "condition": ""
+    },
+    {
+      "id": "APV-005",
+      "area": "apv",
+      "de": "Ernteergebnisse",
+      "en": "Harvest results",
+      "method_de": "Saisonale Nachweise auswerten",
+      "method_en": "Review seasonal evidence",
+      "condition": ""
+    }
+  ]
+}
