@@ -1,0 +1,14 @@
+# Static PWA deployment to GitLab Pages
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  script:
+    - mkdir -p public
+    - cp index.html catalog.json manifest.webmanifest sw.js icon-192.png icon-512.png apple-touch-icon.png .nojekyll public/
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
