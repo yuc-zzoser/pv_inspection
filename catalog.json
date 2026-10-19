@@ -1,5 +1,5 @@
 {
-  "version": "2026-IEA-PVFS-1",
+  "version": "2026-IEA-PVFS-1.2",
   "sourceFile": "PV_Feldpruefung_DE_EN_IEA_PVFS_2026(1).xlsx",
   "areas": [
     {
@@ -603,8 +603,8 @@
       "applicability_en": "All plants",
       "timing_de": "Erstprüfung",
       "timing_en": "Initial",
-      "method_de": "SPD-Status und Koordination prüfen",
-      "method_en": "Check SPD status and coordination",
+      "method_de": "SPD-Status und Koordination prüfen; SPD-Typ (1/2/1+2) dokumentieren",
+      "method_en": "Check SPD status and coordination; record SPD type (1/2/1+2)",
       "evidence_de": "SPD-Konzept, Fotos",
       "evidence_en": "SPD study, photos",
       "criterion_de": "Komponenten korrekt und ohne Fehleranzeige",
@@ -612,7 +612,28 @@
       "qualification": "Elektrofachkraft / Qualified electrician",
       "sources": "712;62446;PERMIT",
       "flag": "",
-      "condition": ""
+      "condition": "",
+      "measurement": {
+        "kind": "select",
+        "options": [
+          {
+            "value": "Typ 1",
+            "de": "Typ 1",
+            "en": "Type 1"
+          },
+          {
+            "value": "Typ 2",
+            "de": "Typ 2",
+            "en": "Type 2"
+          },
+          {
+            "value": "Typ 1+2",
+            "de": "Typ 1+2",
+            "en": "Type 1+2"
+          }
+        ],
+        "unit": ""
+      }
     },
     {
       "id": "AC-010",
@@ -1185,8 +1206,8 @@
       "applicability_en": "All plants",
       "timing_de": "Erstprüfung",
       "timing_en": "Initial",
-      "method_de": "Statusanzeigen und Dimensionierung dokumentieren",
-      "method_en": "Record SPD status and design selection",
+      "method_de": "Statusanzeigen und Dimensionierung dokumentieren; SPD-Typ (1/2/1+2) dokumentieren",
+      "method_en": "Record SPD status and design selection; record SPD type (1/2/1+2)",
       "evidence_de": "SPD-Auswahl, Fotos",
       "evidence_en": "SPD schedule, photos",
       "criterion_de": "Kein Auslöse-/Fehlerzustand; Planung eingehalten",
@@ -1194,7 +1215,28 @@
       "qualification": "Elektrofachkraft / Qualified electrician",
       "sources": "712;62446",
       "flag": "",
-      "condition": ""
+      "condition": "",
+      "measurement": {
+        "kind": "select",
+        "options": [
+          {
+            "value": "Typ 1",
+            "de": "Typ 1",
+            "en": "Type 1"
+          },
+          {
+            "value": "Typ 2",
+            "de": "Typ 2",
+            "en": "Type 2"
+          },
+          {
+            "value": "Typ 1+2",
+            "de": "Typ 1+2",
+            "en": "Type 1+2"
+          }
+        ],
+        "unit": ""
+      }
     },
     {
       "id": "DC-011",
@@ -3615,6 +3657,248 @@
       "sources": "APV;PERMIT;OM",
       "flag": "",
       "condition": "apv"
+    },
+    {
+      "id": "MODULES-MEAS-001",
+      "area": "modules",
+      "de": "Modulneigung – Ist-Winkel erfassen",
+      "en": "PV module tilt – record measured angle",
+      "method_de": "Neigungswinkel mit geeignetem Winkelmesser am repräsentativen Modul messen; Modul-/Tisch-ID dokumentieren.",
+      "method_en": "Measure representative module tilt using a suitable inclinometer and record module/table ID.",
+      "criterion_de": "Gemessener Neigungswinkel (°) mit projektspezifischem Bestandsplan vergleichen.",
+      "criterion_en": "Compare measured tilt (°) with project as-built design.",
+      "evidence_de": "Ist-Wert, Objekt-ID, Foto des Typenschilds oder Messprotokoll",
+      "evidence_en": "Recorded value, object ID, marking photo or measurement record",
+      "applicability_de": "Wenn Kabel/Module vorhanden",
+      "applicability_en": "Where cables/modules installed",
+      "timing_de": "Erstprüfung",
+      "timing_en": "Initial inspection",
+      "condition": "",
+      "measurement": {
+        "unit": "°",
+        "kind": "number"
+      },
+      "sources": "PERMIT;EPC"
+    },
+    {
+      "id": "DC-MEAS-001",
+      "area": "dc",
+      "de": "DC-Kabeltyp aufnehmen",
+      "en": "Record DC cable type",
+      "method_de": "Kabelmantelkennzeichnung ablesen und Typ mit Kabelplan abgleichen.",
+      "method_en": "Read cable jacket marking and compare type with cable schedule.",
+      "criterion_de": "Kabeltyp entspricht freigegebenem Kabelplan; Abweichungen dokumentieren.",
+      "criterion_en": "Cable designation matches approved cable schedule; log deviations.",
+      "evidence_de": "Ist-Wert, Objekt-ID, Foto des Typenschilds oder Messprotokoll",
+      "evidence_en": "Recorded value, object ID, marking photo or measurement record",
+      "applicability_de": "Wenn Kabel/Module vorhanden",
+      "applicability_en": "Where cables/modules installed",
+      "timing_de": "Erstprüfung",
+      "timing_en": "Initial inspection",
+      "condition": "",
+      "measurement": {
+        "unit": "",
+        "kind": "text"
+      },
+      "sources": "PERMIT;EPC"
+    },
+    {
+      "id": "DC-MEAS-002",
+      "area": "dc",
+      "de": "DC-Leiterquerschnitt erfassen",
+      "en": "Record DC conductor cross-section",
+      "method_de": "Kennzeichnung oder Bestandsnachweis prüfen; Querschnitt in mm² erfassen.",
+      "method_en": "Review marking/as-built documentation; record conductor cross-section in mm².",
+      "criterion_de": "Querschnitt entspricht nachgewiesener Auslegung und Leitungs-/Schutzkonzept.",
+      "criterion_en": "Cross-section matches documented cable and protection design.",
+      "evidence_de": "Ist-Wert, Objekt-ID, Foto des Typenschilds oder Messprotokoll",
+      "evidence_en": "Recorded value, object ID, marking photo or measurement record",
+      "applicability_de": "Wenn Kabel/Module vorhanden",
+      "applicability_en": "Where cables/modules installed",
+      "timing_de": "Erstprüfung",
+      "timing_en": "Initial inspection",
+      "condition": "",
+      "measurement": {
+        "unit": "mm²",
+        "kind": "number"
+      },
+      "sources": "PERMIT;EPC"
+    },
+    {
+      "id": "AC-MEAS-001",
+      "area": "ac",
+      "de": "AC-Kabeltyp aufnehmen",
+      "en": "Record AC cable type",
+      "method_de": "Kabelkennzeichnung prüfen, z. B. NAYY; zugehörige Strecke dokumentieren.",
+      "method_en": "Check cable marking, e.g., NAYY, and identify relevant run.",
+      "criterion_de": "Kabeltyp stimmt mit freigegebenem Stromlauf-/Kabelplan überein.",
+      "criterion_en": "Cable type agrees with approved cable documentation.",
+      "evidence_de": "Ist-Wert, Objekt-ID, Foto des Typenschilds oder Messprotokoll",
+      "evidence_en": "Recorded value, object ID, marking photo or measurement record",
+      "applicability_de": "Wenn Kabel/Module vorhanden",
+      "applicability_en": "Where cables/modules installed",
+      "timing_de": "Erstprüfung",
+      "timing_en": "Initial inspection",
+      "condition": "",
+      "measurement": {
+        "unit": "",
+        "kind": "text"
+      },
+      "sources": "PERMIT;EPC"
+    },
+    {
+      "id": "AC-MEAS-002",
+      "area": "ac",
+      "de": "AC-Leiteranzahl und Querschnitt erfassen",
+      "en": "Record AC core count and cross-section",
+      "method_de": "Leiteranzahl und Nennquerschnitt ablesen, z. B. 5 × 50 mm².",
+      "method_en": "Record core count and conductor section, e.g. 5 × 50 mm².",
+      "criterion_de": "Leiteranordnung und Querschnitt entsprechen zugrunde gelegter Auslegung.",
+      "criterion_en": "Core arrangement and cross-section match approved design.",
+      "evidence_de": "Ist-Wert, Objekt-ID, Foto des Typenschilds oder Messprotokoll",
+      "evidence_en": "Recorded value, object ID, marking photo or measurement record",
+      "applicability_de": "Wenn Kabel/Module vorhanden",
+      "applicability_en": "Where cables/modules installed",
+      "timing_de": "Erstprüfung",
+      "timing_en": "Initial inspection",
+      "condition": "",
+      "measurement": {
+        "unit": "",
+        "kind": "text"
+      },
+      "sources": "PERMIT;EPC"
+    },
+    {
+      "id": "MOD-PLATE-PHOTO",
+      "area": "modules",
+      "de": "Modul-Typenschild fotografiert",
+      "en": "Module nameplate photo captured",
+      "applicability_de": "Bei vorhandenem Bauteil",
+      "applicability_en": "Where applicable",
+      "timing_de": "Erst- und Wiederholungsprüfung",
+      "timing_en": "Initial and periodic inspection",
+      "method_de": "Lesbares Foto des Modul-Typenschilds aufnehmen; Modell und Seriennummer zuordnen",
+      "method_en": "Take a legible picture of module nameplate; link model and serial number",
+      "evidence_de": "Foto mit lesbarer Modell-/Seriennummer",
+      "evidence_en": "Photo with readable model/serial number",
+      "criterion_de": "Typenschild vollständig und lesbar dokumentiert",
+      "criterion_en": "Complete, legible nameplate photograph",
+      "qualification": "Elektrofachkraft / Qualified electrical specialist",
+      "sources": "Projektplanung; Herstellerdokumentation / Project design; OEM documentation",
+      "flag": "",
+      "condition": ""
+    },
+    {
+      "id": "INV-PLATE-PHOTO",
+      "area": "wr",
+      "de": "Wechselrichter-Typenschild fotografiert",
+      "en": "Inverter nameplate photo captured",
+      "applicability_de": "Bei vorhandenem Bauteil",
+      "applicability_en": "Where applicable",
+      "timing_de": "Erst- und Wiederholungsprüfung",
+      "timing_en": "Initial and periodic inspection",
+      "method_de": "Lesbares Foto des WR-Typenschilds mit Typ, Seriennummer und Bemessungsdaten aufnehmen",
+      "method_en": "Photograph inverter rating label showing type, serial and ratings",
+      "evidence_de": "Foto des WR-Typenschilds",
+      "evidence_en": "Inverter rating plate photo",
+      "criterion_de": "Typenschild lesbar und dem WR zugeordnet",
+      "criterion_en": "Legible plate photo linked to inverter",
+      "qualification": "Elektrofachkraft / Qualified electrical specialist",
+      "sources": "Projektplanung; Herstellerdokumentation / Project design; OEM documentation",
+      "flag": "",
+      "condition": ""
+    },
+    {
+      "id": "AC-SPD-CONTACT",
+      "area": "ac",
+      "de": "AC-SPD: Fernmeldekontakt / Meldekontakt",
+      "en": "AC SPD: remote signalling contact",
+      "applicability_de": "Bei vorhandenem Bauteil",
+      "applicability_en": "Where applicable",
+      "timing_de": "Erst- und Wiederholungsprüfung",
+      "timing_en": "Initial and periodic inspection",
+      "method_de": "Vorhandensein, Anschluss und Übertragung des Meldekontakts gegen Monitoring- und Projektanforderungen prüfen. Fehlenden oder nicht angeschlossenen Kontakt ggf. als Mangel erfassen.",
+      "method_en": "Check availability, wiring and transmission of remote status contact against project/monitoring requirements; record a deficiency where required.",
+      "evidence_de": "Schaltplan, Monitoring-Signalliste, Foto",
+      "evidence_en": "Wiring diagram, SCADA signal list, photo",
+      "criterion_de": "Gemäß Projekt- und Monitoringvorgaben; fehlender Kontakt ist nicht automatisch ein Normverstoß",
+      "criterion_en": "Per project and monitoring requirements; missing contact is not automatically a code violation",
+      "qualification": "Elektrofachkraft / Qualified electrical specialist",
+      "sources": "Projektplanung; Herstellerdokumentation / Project design; OEM documentation",
+      "flag": "",
+      "condition": "",
+      "measurement": {
+        "kind": "select",
+        "options": [
+          {
+            "value": "connected",
+            "de": "Vorhanden und angeschlossen",
+            "en": "Present and connected"
+          },
+          {
+            "value": "not_connected",
+            "de": "Vorhanden, nicht angeschlossen",
+            "en": "Present, not connected"
+          },
+          {
+            "value": "missing",
+            "de": "Nicht vorhanden",
+            "en": "Not present"
+          },
+          {
+            "value": "unchecked",
+            "de": "Nicht geprüft",
+            "en": "Not checked"
+          }
+        ],
+        "unit": ""
+      }
+    },
+    {
+      "id": "DC-SPD-CONTACT",
+      "area": "dc",
+      "de": "DC-SPD: Fernmeldekontakt / Meldekontakt",
+      "en": "DC SPD: remote signalling contact",
+      "applicability_de": "Bei vorhandenem Bauteil",
+      "applicability_en": "Where applicable",
+      "timing_de": "Erst- und Wiederholungsprüfung",
+      "timing_en": "Initial and periodic inspection",
+      "method_de": "Vorhandensein, Anschluss und Übertragung des Meldekontakts gegen Monitoring- und Projektanforderungen prüfen. Fehlenden oder nicht angeschlossenen Kontakt ggf. als Mangel erfassen.",
+      "method_en": "Check availability, wiring and transmission of remote status contact against project/monitoring requirements; record a deficiency where required.",
+      "evidence_de": "Schaltplan, Monitoring-Signalliste, Foto",
+      "evidence_en": "Wiring diagram, SCADA signal list, photo",
+      "criterion_de": "Gemäß Projekt- und Monitoringvorgaben; fehlender Kontakt ist nicht automatisch ein Normverstoß",
+      "criterion_en": "Per project and monitoring requirements; missing contact is not automatically a code violation",
+      "qualification": "Elektrofachkraft / Qualified electrical specialist",
+      "sources": "Projektplanung; Herstellerdokumentation / Project design; OEM documentation",
+      "flag": "",
+      "condition": "",
+      "measurement": {
+        "kind": "select",
+        "options": [
+          {
+            "value": "connected",
+            "de": "Vorhanden und angeschlossen",
+            "en": "Present and connected"
+          },
+          {
+            "value": "not_connected",
+            "de": "Vorhanden, nicht angeschlossen",
+            "en": "Present, not connected"
+          },
+          {
+            "value": "missing",
+            "de": "Nicht vorhanden",
+            "en": "Not present"
+          },
+          {
+            "value": "unchecked",
+            "de": "Nicht geprüft",
+            "en": "Not checked"
+          }
+        ],
+        "unit": ""
+      }
     }
   ],
   "pvfs": [
