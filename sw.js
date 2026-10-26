@@ -1,4 +1,4 @@
-const CACHE='pv-inspection-test-v0-4-6-iea-pvfs';
+const CACHE='pv-inspection-test-v0-4-7-iea-pvfs';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./catalog.json','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))),self.clients.claim()])));
