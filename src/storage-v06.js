@@ -81,7 +81,7 @@ function saveExecutionWithEvidence(db,execution,metadata,blob){
 function checkOverride(plantId,checkId,changes){
  if(!plantId||!checkId)throw new TypeError('plantId and checkId required');
  // Never change identity of the catalog check; overrides are plant-scoped.
- return {id:plantId+'::'+checkId,plantId,checkId,...changes,updated:new Date().toISOString()};
+ return {...changes,id:plantId+'::'+checkId,plantId,checkId,updated:new Date().toISOString()};
 }
 root.PVStorageV06=Object.freeze({DB_NAME,DB_VERSION,definitions,open,put,get,byIndex,putEvidence,saveExecutionWithEvidence,checkOverride,uuid});
 })(typeof window!=='undefined'?window:globalThis);
