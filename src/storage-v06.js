@@ -2,13 +2,14 @@
    Uses small project/result records and independent binary Blob media. */
 (function(root){
 'use strict';
-const NAME='pv-inspection-v06',VERSION=1;
+const NAME='pv-inspection-v06',VERSION=2;
 let connection=null,opening=null;
 const stores={
  projects:{keyPath:'id'},
  results:{keyPath:'id',indexes:['plantId','checkId','targetId']},
  media:{keyPath:'id',indexes:['plantId','resultId']},
- settings:{keyPath:'key'}
+ settings:{keyPath:'key'},
+ catalogSnapshots:{keyPath:'plantId'}
 };
 function openFresh(){return new Promise((resolve,reject)=>{
  const req=indexedDB.open(NAME,VERSION);
@@ -60,9 +61,11 @@ function storeMedia(plantId,resultId,blob,info={}){
  return transaction(['media'],'readwrite',tx=>tx.objectStore('media').put(record)).then(()=>({id,mime:record.mime,size:record.size,at:record.at}));
 }
 function removeMedia(id){return transaction(['media'],'readwrite',tx=>tx.objectStore('media').delete(id))}
+function saveCatalog(plantId,catalog){return transaction(['catalogSnapshots'],'readwrite',tx=>tx.objectStore('catalogSnapshots').put({plantId,catalog}))}
+function getCatalog(plantId){return one('catalogSnapshots',plantId).then(x=>x?.catalog||null)}
 function saveSetting(key,value){return transaction(['settings'],'readwrite',tx=>tx.objectStore('settings').put({key,value}))}
-function deletePlant(id){return transaction(['projects','results','media'],'readwrite',tx=>{
- tx.objectStore('projects').delete(id);
+function deletePlant(id){return transaction(['projects','results','media','catalogSnapshots'],'readwrite',tx=>{
+ tx.objectStore('projects').delete(id);tx.objectStore('catalogSnapshots').delete(id);
  // For explicit deletion only; callers must confirm. IDB cursors remain in same transaction.
  for(const name of ['results','media']){
   const cursor=tx.objectStore(name).index('plantId').openKeyCursor(IDBKeyRange.only(id));
@@ -70,5 +73,5 @@ function deletePlant(id){return transaction(['projects','results','media'],'read
  }
 })}
 function close(){if(connection){connection.close();connection=null}}
-root.PVStorageV06=Object.freeze({NAME,VERSION,open,close,transaction,one,all,byPlant,keysByPlant,saveState,storeMedia,removeMedia,saveSetting,deletePlant});
+root.PVStorageV06=Object.freeze({NAME,VERSION,open,close,transaction,one,all,byPlant,keysByPlant,saveState,storeMedia,removeMedia,saveCatalog,getCatalog,saveSetting,deletePlant});
 })(typeof window!=='undefined'?window:globalThis);
