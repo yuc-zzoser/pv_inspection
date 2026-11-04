@@ -17,6 +17,9 @@ test('separate records and binary Blob evidence survive database reopening',asyn
  const stored=await s.one('projects',plant.id);
  assert.equal(stored.name,'Plant');assert.equal(stored.results,undefined,'Project must not embed results');
  assert.equal((await s.byPlant('results',plant.id)).length,2);
+ assert.equal((await s.one('settings','current')).value,plant.id,'Current project should survive restart');
+ await s.saveCatalog(plant.id,{version:'1.0.0',checks:[],areas:[]});
+ assert.equal((await s.getCatalog(plant.id)).version,'1.0.0');
  const original=new Blob(['This is binary photo data'],{type:'image/jpeg'});
  const saved=await s.storeMedia(plant.id,'AC-001',original,{id:'photo-001',kind:'photo'});
  assert.equal(saved.id,'photo-001');
@@ -28,6 +31,7 @@ test('separate records and binary Blob evidence survive database reopening',asyn
  assert.equal((await s.one('media','photo-001')).size,original.size);
  await s.deletePlant(plant.id);
  assert.equal(await s.one('projects',plant.id),undefined);
+ assert.equal(await s.getCatalog(plant.id),null);
  assert.equal((await s.byPlant('results',plant.id)).length,0);
  assert.equal((await s.byPlant('media',plant.id)).length,0);
  s.close();
@@ -46,4 +50,19 @@ test('ZIP roundtrip retains originals, validates CRC and rejects corruption',asy
  bytes[found]^=0x12;
  await assert.rejects(zip.read(new Blob([bytes])),/checksum mismatch/);
  await assert.rejects(zip.create([{name:'../bad.txt',blob:'bad'}]),/Unsafe archive path/);
+});
+
+test('HTML contains valid inline scripts and external offline modules',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ const tags=new RegExp('<script([^>]*)>([\\s\\S]*?)<\\/script>','g');
+ let match,parsed=0;
+ while((match=tags.exec(html))){
+  if(match[1].includes('application/json')){JSON.parse(match[2]);continue}
+  if(match[1].includes('src='))continue;
+  new vm.Script(match[2],{filename:'index-inline.js'});parsed++;
+ }
+ assert.ok(parsed>=2);
+ assert.ok(html.includes('src="./src/storage-v06.js"'));
+ assert.ok(html.includes('src="./src/backup-v06.js"'));
+ assert.ok(!html.includes('readAsDataURL('));
 });
