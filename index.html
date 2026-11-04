@@ -408,7 +408,7 @@ async function backup(){
    entries.push({name:'media/'+id,blob:item.blob});
    media.push({id,kind:item.kind||'',resultId:item.resultId,name:item.name||'',mime:item.mime||'',size:item.blob.size,at:item.at||''});
   }
-  const manifest={format:'pv-inspection-backup-2',exported:now(),appVersion:'0.6.0',catalogVersion:copy.catalogVersion||plantCatalog.version,catalog:plantCatalog,project:copy,media};
+  const manifest={format:'pv-inspection-backup-2',exported:now(),appVersion:'0.6.0-beta.1',catalogVersion:copy.catalogVersion||plantCatalog.version,catalog:plantCatalog,project:copy,media};
   const archive=await PVBackupV06.create([{name:'manifest.json',blob:JSON.stringify(manifest)},...entries]);
   saveFile('PV-Inspection_'+backupStamp()+'.zip',archive);
   status(t('Backup bereit — Datei an externem Speicherort prüfen','Backup ready — verify the downloaded file'));
