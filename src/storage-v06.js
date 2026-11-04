@@ -43,6 +43,7 @@ async function transaction(storeNames,mode,work){
 function one(store,key){return transaction([store],'readonly',tx=>tx.objectStore(store).get(key))}
 function all(store){return transaction([store],'readonly',tx=>tx.objectStore(store).getAll())}
 function byPlant(store,plantId){return transaction([store],'readonly',tx=>tx.objectStore(store).index('plantId').getAll(plantId))}
+function keysByPlant(store,plantId){return transaction([store],'readonly',tx=>tx.objectStore(store).index('plantId').getAllKeys(plantId))}
 function saveState(plant,changes,currentId){
  if(!plant||!plant.id)throw new TypeError('Plant needs an id');
  const metadata={...plant};delete metadata.results;
@@ -69,5 +70,5 @@ function deletePlant(id){return transaction(['projects','results','media'],'read
  }
 })}
 function close(){if(connection){connection.close();connection=null}}
-root.PVStorageV06=Object.freeze({NAME,VERSION,open,close,transaction,one,all,byPlant,saveState,storeMedia,removeMedia,saveSetting,deletePlant});
+root.PVStorageV06=Object.freeze({NAME,VERSION,open,close,transaction,one,all,byPlant,keysByPlant,saveState,storeMedia,removeMedia,saveSetting,deletePlant});
 })(typeof window!=='undefined'?window:globalThis);
