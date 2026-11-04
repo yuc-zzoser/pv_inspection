@@ -1,0 +1,26 @@
+name: PV Inspection v0.6 smoke tests
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/v06-smoke.yml'
+  workflow_dispatch:
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-package-lock fake-indexeddb@6
+      - name: Verify JavaScript syntax in HTML and source files
+        run: |
+          node --check src/storage-v06.js
+          node --check src/backup-v06.js
+          node --check tests/v06.test.cjs
+      - name: Run storage and ZIP integrity tests
+        run: node --test tests/v06.test.cjs
