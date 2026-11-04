@@ -164,7 +164,7 @@ function defectsPage(){if(resultsTab==='gallery')return galleryPage();
  const list=all.map(x=>`<div class="card danger"><strong>${esc(x.id)} · ${esc(x.check?.[lang]||'')}</strong><p>${esc(x.v.part)} ${esc(x.v.wr)} ${esc(x.v.table)} ${esc(x.v.string)}</p><p>${esc(x.v.note||t('Noch keine Beschreibung','No description'))}</p><span class="pill">${esc(x.v.severity||'S2')}</span><button onclick="jump('${x.id}')">${t('Öffnen','Open')}</button></div>`).join('');
  return `<h1>${t('Ergebnisse','Results')}</h1><div class="row"><button class="selected">${t('Übersicht','Overview')}</button><button onclick="setResultsTab('gallery')">${t('Fotogalerie','Photo gallery')}</button></div><div class="card"><h2>${t('Prüfübersicht','Inspection summary')}</h2><p><strong>${executed} / ${total}</strong> ${t('Prüfpunkte abgeschlossen','checks completed')}</p><div class="bar"><div style="width:${total?executed/total*100:0}%"></div></div><div class="grid">${cards.map(([k,name])=>`<div class="card"><strong>${name}</strong><h2>${states[k].length}</h2></div>`).join('')}</div><p class="muted small">${t('Offen: Prüfpunkt wurde als Pending gespeichert. Nicht ausgeführt: noch kein Ergebnis erfasst. Entfällt: als N/A bewertet.','Pending: check explicitly saved as pending. Not executed: no result recorded. N/A: marked not applicable.')}</p></div><h2>${t('Mängel & Befunde','Defects & findings')}</h2><p>${all.length} ${t('nicht bestandene Prüfungen','failed checks')} · ${other.length} ${t('spontane Befunde','ad-hoc findings')}</p>${list}${other.map(x=>`<div class="card danger"><strong>${esc(x.area)} · ${esc(x.title)}</strong><p>${esc(x.note)}</p><small>${new Date(x.created).toLocaleString(lang)}</small></div>`).join('')}<button onclick="addFinding('docs')">+ ${t('Spontanen Befund hinzufügen','Add finding')}</button>`
 }
-function exportPage(){return `<h1>${t('Bericht & Sicherung','Report & backup')}</h1><div class="card"><h2>${t('Vollständiges Backup','Full backup')}</h2><p>${t('JSON-Sicherung inklusive Prüfungen, Konfiguration, Fotos und Historie. Die Datei an einem zweiten Speicherort ablegen.','JSON backup including results, configuration, photos and history. Save it separately.')}</p><button class="primary" onclick="backup()">↓ ${t('Backup herunterladen','Download backup')}</button><label class="field"><span>${t('Backup importieren','Import backup')}</span><input id="restore" type="file" accept="application/json,.json"></label><p class="muted small">${t('Import ersetzt nicht stillschweigend bestehende Projekte.','Import does not silently overwrite an existing project.')}</p></div><div class="card"><h2>${t('Prüfergebnisse exportieren','Export inspection results')}</h2><button onclick="csv()">↓ CSV (${t('Excel-kompatibel','Excel-compatible')})</button><button onclick="printInspection()">${t('Drucken / PDF','Print / PDF')}</button></div><div class="note">${t('Wichtig: Browserdaten können gelöscht werden. Die Anwendung bietet keine absolute Sicherung gegen Geräteverlust.','Browser data may be deleted. The app cannot guarantee protection against device loss.')}</div>`}
+function exportPage(){return `<h1>${t('Bericht & Sicherung','Report & backup')}</h1><div class="card"><h2>${t('Vollständiges Backup','Full backup')}</h2><p>${t('ZIP-Sicherung inklusive Prüfungen, Konfiguration, Fotos und Historie. Die Datei an einem zweiten Speicherort ablegen.','ZIP backup including results, configuration, photos and history. Save it separately.')}</p><button class="primary" onclick="backup()">↓ ${t('Backup herunterladen','Download backup')}</button><label class="field"><span>${t('Backup importieren','Import backup')}</span><input id="restore" type="file" accept=".zip,application/zip"></label><p class="muted small">${t('Import ersetzt nicht stillschweigend bestehende Projekte.','Import does not silently overwrite an existing project.')}</p></div><div class="card"><h2>${t('Prüfergebnisse exportieren','Export inspection results')}</h2><button onclick="csv()">↓ CSV (${t('Excel-kompatibel','Excel-compatible')})</button><button onclick="printInspection()">${t('Drucken / PDF','Print / PDF')}</button></div><div class="note">${t('Wichtig: Browserdaten können gelöscht werden. Die Anwendung bietet keine absolute Sicherung gegen Geräteverlust.','Browser data may be deleted. The app cannot guarantee protection against device loss.')}</div>`}
 function ensureResult(id){if(!project.results[id])project.results[id]={status:'pending',part:'',wr:'',table:'',string:'',serial:'',inspector:lead()?.name||'',note:'',severity:'S2',owner:'',due:'',evidence:'',photos:[],created:now(),modified:now(),dayId:day()?.id||'',history:[]};return project.results[id]}
 function setResult(id,k,v){if(k==='status'&&!roster().some(p=>p.name?.trim())){alert(t('Bitte zuerst mindestens einen Prüfer unter Prüftag eintragen.','Please enter at least one inspector in Inspection day first.'));go('day');return}const r=ensureResult(id);if(k==='status'&&v==='pass'&&id.endsWith('PLATE-PHOTO')&&!(r.photos||[]).length){alert(t('Bitte zuerst ein Typenschild-Foto anhängen.','Attach a nameplate photo first.'));return}if(!r.inspector&&lead())r.inspector=lead().name;const old=r[k];if(old===v)return;r[k]=v;r.modified=now();r.history.push({at:r.modified,field:k,old,new:v});save();if(k==='status')render()}
 
@@ -207,7 +207,7 @@ function bind(){loadVisibleMedia();if(page==='defects'&&resultsTab==='gallery'){
   }catch(e){console.error(e);alert(t('Foto konnte nicht gespeichert werden: ','Photo could not be saved: ')+e.message)}
  }
  render()
-}}if(page==='export'){$('restore').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let obj=JSON.parse(await f.text());if(obj.format!=='pv-inspection-backup-1'||!obj.project?.id)throw Error('Invalid format');let incoming=obj.project;const existing=(await getAll('projects')).find(x=>x.id===incoming.id);if(existing){if(!confirm(t('Projekt besteht bereits. Als Kopie importieren?','Project exists. Import as new copy?')))return;incoming.id=crypto.randomUUID();incoming.name+=' (Import)'}await put('projects',incoming);project=incoming;migrateCatalog(project);await save();go('home')}catch(e){alert(t('Import fehlgeschlagen: ','Import failed: ')+e.message)}}}}
+}}if(page==='export'){$('restore').onchange=async e=>restoreBackup(e.target.files[0])}}
 function addPerson(){if(!Array.isArray(day().people))day().people=[];day().people.push({id:crypto.randomUUID(),name:'',company:'',role:'',from:'',to:''});save();render()}function removePerson(id){day().people=(day().people||[]).filter(p=>p.id!==id);save();render()}async function newProject(){
  if(!confirm(t('Neue Anlage anlegen? Die bisherigen Daten bleiben erhalten.','Create new plant? Existing data are retained.')))return;
  await flushSave();project=defaultProject();fingerprints=new Map();syncGlobalRoster();await save();go('config')
@@ -255,9 +255,79 @@ async function removePhoto(id,i){
  if(await save()&&removed){await store.removeMedia(removed.id).catch(console.error);if(removed.thumbId)await store.removeMedia(removed.thumbId).catch(console.error)}
  render()
 }
-function printInspection(){const escText=x=>esc(x||'—');const team=roster();const items=allChecks().filter(c=>project.results[c.id]?.status&&project.results[c.id].status!=='pending');const areaName=id=>catalog.areas.find(a=>a.id===id)?.[lang]||id;let out=`<div class="report-title"><h1>PV Inspection · ${escText(project.name)}</h1><p>${t('Prüfkatalog','Catalog')}: ${esc(project.catalogVersion||catalog.version)} · PV Inspection 0.5.6</p><p>${escText(project.site)} · ${t('Datum','Date')}: ${new Date().toLocaleDateString(lang)} · ${t('Export','Export')}: ${new Date().toLocaleString(lang)}</p></div><h2>${t('Anlagendaten','Plant details')}</h2><p>${t('Betreiber','Owner')}: ${escText(project.owner)} · ${t('Netzbetreiber','DSO')}: ${escText(project.dso)} · DC: ${escText(project.dc)} kWp · AC: ${escText(project.ac)}</p><h2>${t('Prüfteam','Inspection team')}</h2><p>${team.map(p=>escText(p.name)+' ('+escText(p.company)+')').join('; ')||'—'}</p><p>${t('Verantwortlich','Responsible')}: ${escText(lead()?.name)}</p><h2>${t('Prüfungstage und Wetter','Inspection days and weather')}</h2>${project.days.map(d=>`<p>${escText(d.date)} · ${escText(d.weather)} · ${t('Temperatur','Temperature')}: ${escText(d.temp)} °C · ${t('Wind','Wind')}: ${escText(d.wind)} m/s</p>`).join('')}<h2>${t('Prüfergebnisse','Inspection results')} (${items.length}/${allChecks().length})</h2>`;for(let c of items){let r=project.results[c.id];out+=`<div class="report-card"><strong>${esc(c.id)} · ${esc(areaName(c.area))}: ${esc(c[lang])}</strong><p><b>${esc(r.status.toUpperCase())}</b> · ${t('Prüfer','Inspector')}: ${escText(inspectorValue(r.inspector))}</p><p>${t('Prüfobjekt','Object')}: ${[r.part,r.wr,r.table,r.string,r.serial].filter(Boolean).map(esc).join(' / ')||'—'}</p>${r.measured!==undefined&&r.measured!==''?`<p>${t('Ist-Wert','Measured value')}: ${esc(r.measured)} ${esc(c.measurement?.unit||'')}</p>`:''}${r.note?`<p>${t('Befund','Finding')}: ${esc(r.note)}</p>`:''}<p class="report-meta">${t('Erfasst','Created')}: ${escText(r.created)} · ${t('Geändert','Modified')}: ${escText(r.modified)} · ${t('Schwere','Severity')}: ${escText(r.severity)}</p>${(r.photos||[]).map(p=>`<figure><img class="report-photo" data-media-id="${esc(p.id)}" alt="${esc(p.name)}"><figcaption>${esc(p.name)}</figcaption></figure>`).join('')}</div>`}out+=`<h2>${t('Spontane Befunde','Additional findings')}</h2>`+project.findings.map(f=>`<div class="report-card"><strong>${esc(f.title)}</strong><p>${esc(f.note)}</p></div>`).join('');const node=$('printReport');node.innerHTML=out;node.setAttribute('aria-hidden','false');setTimeout(()=>window.print(),300)}
+async function printInspection(){const escText=x=>esc(x||'—');const team=roster();const items=allChecks().filter(c=>project.results[c.id]?.status&&project.results[c.id].status!=='pending');const areaName=id=>catalog.areas.find(a=>a.id===id)?.[lang]||id;let out=`<div class="report-title"><h1>PV Inspection · ${escText(project.name)}</h1><p>${t('Prüfkatalog','Catalog')}: ${esc(project.catalogVersion||catalog.version)} · PV Inspection 0.5.6</p><p>${escText(project.site)} · ${t('Datum','Date')}: ${new Date().toLocaleDateString(lang)} · ${t('Export','Export')}: ${new Date().toLocaleString(lang)}</p></div><h2>${t('Anlagendaten','Plant details')}</h2><p>${t('Betreiber','Owner')}: ${escText(project.owner)} · ${t('Netzbetreiber','DSO')}: ${escText(project.dso)} · DC: ${escText(project.dc)} kWp · AC: ${escText(project.ac)}</p><h2>${t('Prüfteam','Inspection team')}</h2><p>${team.map(p=>escText(p.name)+' ('+escText(p.company)+')').join('; ')||'—'}</p><p>${t('Verantwortlich','Responsible')}: ${escText(lead()?.name)}</p><h2>${t('Prüfungstage und Wetter','Inspection days and weather')}</h2>${project.days.map(d=>`<p>${escText(d.date)} · ${escText(d.weather)} · ${t('Temperatur','Temperature')}: ${escText(d.temp)} °C · ${t('Wind','Wind')}: ${escText(d.wind)} m/s</p>`).join('')}<h2>${t('Prüfergebnisse','Inspection results')} (${items.length}/${allChecks().length})</h2>`;for(let c of items){let r=project.results[c.id];out+=`<div class="report-card"><strong>${esc(c.id)} · ${esc(areaName(c.area))}: ${esc(c[lang])}</strong><p><b>${esc(r.status.toUpperCase())}</b> · ${t('Prüfer','Inspector')}: ${escText(inspectorValue(r.inspector))}</p><p>${t('Prüfobjekt','Object')}: ${[r.part,r.wr,r.table,r.string,r.serial].filter(Boolean).map(esc).join(' / ')||'—'}</p>${r.measured!==undefined&&r.measured!==''?`<p>${t('Ist-Wert','Measured value')}: ${esc(r.measured)} ${esc(c.measurement?.unit||'')}</p>`:''}${r.note?`<p>${t('Befund','Finding')}: ${esc(r.note)}</p>`:''}<p class="report-meta">${t('Erfasst','Created')}: ${escText(r.created)} · ${t('Geändert','Modified')}: ${escText(r.modified)} · ${t('Schwere','Severity')}: ${escText(r.severity)}</p>${(r.photos||[]).map(p=>`<figure><img class="report-photo" data-media-id="${esc(p.id)}" alt="${esc(p.name)}"><figcaption>${esc(p.name)}</figcaption></figure>`).join('')}</div>`}out+=`<h2>${t('Spontane Befunde','Additional findings')}</h2>`+project.findings.map(f=>`<div class="report-card"><strong>${esc(f.title)}</strong><p>${esc(f.note)}</p></div>`).join('');const node=$('printReport');node.innerHTML=out;node.setAttribute('aria-hidden','false');setTimeout(()=>window.print(),300)}
 window.addEventListener('afterprint',()=>{const node=$('printReport');node.innerHTML='';node.setAttribute('aria-hidden','true')});
-function download(name,content,type){const b=new Blob([content],{type});let url=URL.createObjectURL(b);let a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}function backup(){const d=new Date(),pad=n=>String(n).padStart(2,'0');const stamp=[d.getFullYear(),pad(d.getMonth()+1),pad(d.getDate())].join('-')+'_'+[pad(d.getHours()),pad(d.getMinutes()),pad(d.getSeconds())].join('-');download('PV-Inspection_'+stamp+'.json',JSON.stringify({format:'pv-inspection-backup-1',exported:now(),catalog,project},null,2),'application/json')}function csv(){let h=['ID','DE','EN','Area','Status','Plant section','Inverter','Table','String','Module SN','Inspector','Finding','Severity','Created UTC','Modified UTC'];let body=allChecks().map(c=>{let r=project.results[c.id]||{};return [c.id,c.de,c.en,c.area,r.status||'pending',r.part,r.wr,r.table,r.string,r.serial,r.inspector,r.note,r.severity,r.created,r.modified].map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')});download('PV-Inspection.csv','\ufeff'+[h.join(';'),...body].join('\r\n'),'text/csv;charset=utf-8')}
+function download(name,content,type){const b=new Blob([content],{type});let url=URL.createObjectURL(b);let a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}function backupStamp(){
+ const d=new Date(),pad=n=>String(n).padStart(2,'0');
+ return [d.getFullYear(),pad(d.getMonth()+1),pad(d.getDate())].join('-')+'_'+[pad(d.getHours()),pad(d.getMinutes()),pad(d.getSeconds())].join('-')
+}
+function saveFile(name,blob){
+ const url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),60000)
+}
+async function backup(){
+ try{
+  await flushSave();if(saveFailed)throw new Error('Unsaved changes. Backup aborted.');
+  status(t('Backup wird erstellt…','Building backup…'));
+  const copy=structuredClone(project);
+  const ids=new Set();
+  for(const result of Object.values(copy.results||{})){
+   for(const p of result.photos||[]){if(p.id)ids.add(p.id);if(p.thumbId)ids.add(p.thumbId)}
+   for(const a of result.voices||[])if(a.id)ids.add(a.id);
+  }
+  const entries=[];const media=[];
+  for(const id of ids){
+   const item=await store.one('media',id);
+   if(!item?.blob)throw new Error('Missing evidence: '+id);
+   entries.push({name:'media/'+id,blob:item.blob});
+   media.push({id,kind:item.kind||'',resultId:item.resultId,name:item.name||'',mime:item.mime||'',size:item.blob.size,at:item.at||''});
+  }
+  const manifest={format:'pv-inspection-backup-2',exported:now(),appVersion:'0.6.0',catalogVersion:copy.catalogVersion||catalog.version,catalog,project:copy,media};
+  const archive=await PVBackupV06.create([{name:'manifest.json',blob:JSON.stringify(manifest)},...entries]);
+  saveFile('PV-Inspection_'+backupStamp()+'.zip',archive);
+  status(t('Backup bereit — Datei an externem Speicherort prüfen','Backup ready — verify the downloaded file'));
+ }catch(e){
+  console.error('Backup failed',e);status(t('⚠ Backup fehlgeschlagen','⚠ Backup failed'));
+  alert(t('Backup fehlgeschlagen: ','Backup failed: ')+e.message)
+ }
+}
+async function restoreBackup(file){
+ if(!file)return;
+ try{
+  status(t('Backup wird geprüft…','Verifying backup…'));
+  const {manifest,entries}=await PVBackupV06.read(file);
+  if(manifest.format!=='pv-inspection-backup-2'||!manifest.project?.id||!Array.isArray(manifest.media))throw Error('Unsupported backup');
+  const source=manifest.project;
+  const existing=(await getAll('projects')).some(x=>x.id===source.id);
+  if(!confirm(t('Backup als neue Anlage importieren?','Import backup as a separate plant?')))return;
+  await flushSave();
+  const target=structuredClone(source);
+  target.id=crypto.randomUUID();
+  if(existing)target.name=(target.name||'Anlage')+' (Import)';
+  const mapping=new Map(manifest.media.map(m=>[m.id,crypto.randomUUID()]));
+  for(const result of Object.values(target.results||{})){
+   for(const item of result.photos||[]){if(item.id)item.id=mapping.get(item.id)||item.id;if(item.thumbId)item.thumbId=mapping.get(item.thumbId)||item.thumbId}
+   for(const item of result.voices||[])if(item.id)item.id=mapping.get(item.id)||item.id;
+  }
+  let success=false;
+  try{
+   for(const m of manifest.media){
+    const blob=entries.get('media/'+m.id);
+    if(!blob||blob.size!==m.size)throw Error('Evidence size mismatch '+m.id);
+    const newId=mapping.get(m.id);
+    await store.storeMedia(target.id,m.resultId,blob.slice(0,blob.size,m.mime||'application/octet-stream'),{id:newId,kind:m.kind,name:m.name,at:m.at});
+   }
+   const resultRecords=Object.entries(target.results||{}).map(([checkId,value])=>({id:target.id+'::'+checkId,plantId:target.id,checkId,value}));
+   await store.saveState(target,resultRecords,target.id);
+   success=true;
+  }finally{
+   if(!success)await store.deletePlant(target.id).catch(error=>console.error('Import rollback failed',error))
+  }
+  project=target;fingerprints=new Map();syncGlobalRoster();
+  status(t('✓ Backup importiert','✓ Backup imported'));go('home')
+ }catch(e){console.error('Restore failed',e);status(t('⚠ Import fehlgeschlagen','⚠ Import failed'));alert(t('Import fehlgeschlagen: ','Import failed: ')+e.message)}
+}
+function csv(){let h=['ID','DE','EN','Area','Status','Plant section','Inverter','Table','String','Module SN','Inspector','Finding','Severity','Created UTC','Modified UTC'];let body=allChecks().map(c=>{let r=project.results[c.id]||{};return [c.id,c.de,c.en,c.area,r.status||'pending',r.part,r.wr,r.table,r.string,r.serial,r.inspector,r.note,r.severity,r.created,r.modified].map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')});download('PV-Inspection.csv','\ufeff'+[h.join(';'),...body].join('\r\n'),'text/csv;charset=utf-8')}
 $('language').onchange=e=>{lang=e.target.value;localStorage.setItem('pv-lang',lang);document.documentElement.lang=lang;render()};async function init(){try{
  await store.open();const projects=await getAll('projects');const settings=await getAll('app');
  const current=settings.find(x=>x.key==='current')?.id;
