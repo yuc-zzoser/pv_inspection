@@ -51,7 +51,7 @@ function saveState(plant,changes,currentId){
  return transaction(['projects','results','settings'],'readwrite',tx=>{
   tx.objectStore('projects').put(metadata);
   for(const r of changes)tx.objectStore('results').put(r);
-  tx.objectStore('settings').put({key:'current',id:currentId||plant.id});
+  tx.objectStore('settings').put({key:'current',value:currentId||plant.id});
  });
 }
 function storeMedia(plantId,resultId,blob,info={}){
