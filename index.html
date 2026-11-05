@@ -119,6 +119,8 @@ const walkKinds=[
  {id:'mount',de:'Unterkonstruktion',en:'Mounting structure',area:'mount'}
 ];
 let selectedWalkId=null,selectedWalkAssetId=null;
+function walks(){return project.walks||(project.walks=[])}
+function selectedWalk(){return walks().find(w=>w.id===selectedWalkId)||walks()[0]}
 let walkDraft=null;
 
 function newWalk(){
