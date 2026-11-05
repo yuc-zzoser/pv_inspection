@@ -119,14 +119,7 @@ const walkKinds=[
  {id:'mount',de:'Unterkonstruktion',en:'Mounting structure',area:'mount'}
 ];
 let selectedWalkId=null,selectedWalkAssetId=null;
-function walks(){return project.walks||(project.walks=[])}
-function selectedWalk(){return walks().find(w=>w.id===selectedWalkId)||walks()[0]}
-function newWalk(){
- const label=prompt(t('Begehungsbereich / Station bezeichnen','Name walk / station'),t('Station','Station')+' '+(walks().length+1));
- if(!label?.trim())return;
- const walk={id:crypto.randomUUID(),name:label.trim(),assets:[],created:now()};
- walks().push(walk);selectedWalkId=walk.id;selectedWalkAssetId=null;save();go('walk')
-}
+let walkDraft=null;
 function renameWalk(id){const walk=walks().find(w=>w.id===id);if(!walk)return;const name=prompt(t('Begehung umbenennen','Rename walk'),walk.name);if(name?.trim()){walk.name=name.trim();for(const r of Object.values(project.results||{}))if(r.walkId===walk.id)r.part=walk.name;save();render()}}
 function addWalkAsset(){
  const walk=selectedWalk();if(!walk)return;
@@ -185,6 +178,7 @@ function openWalkCheck(walkId,assetId,baseId){
  save();go('check')
 }
 function walkPage(){
+ if(walkDraft)return wizardPage();
  const walk=selectedWalk(),asset=walk?.assets.find(a=>a.id===selectedWalkAssetId)||walk?.assets[0];
  if(walk&&asset)selectedWalkAssetId=asset.id;
  const existing=walks().map(w=>`<button class="${w.id===walk?.id?'selected':''}" onclick="chooseWalk('${w.id}')">${esc(w.name)}</button>`).join('');
@@ -193,7 +187,7 @@ function walkPage(){
  const applicable=asset?checks(asset.area).filter(c=>!c.assetId||c.assetId===asset.id).filter(c=>!c.baseCheckId):[];
  const related=asset?project.custom.filter(c=>c.assetId===asset.id):[];
  const defined=new Map(related.map(c=>[c.baseCheckId,c]));
- return `<h1>${t('Begehung','Site walk')}</h1><div class="card"><div class="row">${existing}<button class="primary" onclick="newWalk()">+ ${t('Neue Begehung','New walk')}</button></div></div>${walk?`<div class="card"><div class="row between"><h2>${esc(walk.name)}</h2><button onclick="renameWalk('${walk.id}')">${t('Umbenennen','Rename')}</button></div><h3>${t('Komponente hinzufügen','Add component')}</h3><label class="field"><span>${t('Komponententyp','Component type')}</span><select id="newWalkKind">${kinds}</select></label><label class="field"><span>${t('Bezeichnung','Designation')}</span><input id="newWalkAssetName" placeholder="z. B. Trafo 3, WR3.5, WR3.7"></label><button class="primary" onclick="addWalkAsset()">+ ${t('Hinzufügen','Add')}</button><h3>${t('Prüfobjekte / Reihenfolge','Equipment / order')}</h3>${assetChoices||`<p class="muted">${t('Zuerst Komponenten erfassen.','Add components to begin.')}</p>`}</div>${asset?`<div class="card"><h2>${esc(asset.name)}</h2><p class="muted">${t('Prüfpunkte werden beim Öffnen nur für dieses Prüfobjekt angelegt.','Checks are instantiated for this object only when opened.')}</p><div class="check-list">${applicable.map(c=>{const saved=defined.get(c.id),r=saved&&project.results[saved.id];return `<button onclick="openWalkCheck('${walk.id}','${asset.id}','${c.id}')"><strong>${esc(c[lang])}</strong><br><small>${esc(c.id)} · ${esc(r?.status||t('Nicht begonnen','Not started'))}</small></button>`}).join('')}</div></div>`:''}`:`<p class="note">${t('Neuen Begehung anlegen, um die tatsächlich vorhandenen Komponenten zu erfassen.','Create a walk and add the components actually present on site.')}</p>`}`;
+ return `<h1>${t('Begehung','Site walk')}</h1><div class="card"><div class="row">${existing}<button class="primary" onclick="newWalk()">+ ${t('Neue Begehung','New walk')}</button></div></div>${walk?`<div class="card"><div class="row between"><h2>${esc(walk.name)}</h2><button onclick="renameWalk('${walk.id}')">${t('Umbenennen','Rename')}</button></div><details><summary>+ ${t('Komponente hinzufügen','Add component')}</summary><label class="field"><span>${t('Komponententyp','Component type')}</span><select id="newWalkKind">${kinds}</select></label><label class="field"><span>${t('Bezeichnung','Designation')}</span><input id="newWalkAssetName" placeholder="z. B. Trafo 3, WR3.5, WR3.7"></label><button class="primary" onclick="addWalkAsset()">+ ${t('Hinzufügen','Add')}</button></details><h3>${t('Prüfobjekte / Reihenfolge','Equipment / order')}</h3>${assetChoices||`<p class="muted">${t('Zuerst Komponenten erfassen.','Add components to begin.')}</p>`}</div>${asset?`<div class="card"><h2>${esc(asset.name)}</h2><p class="muted">${t('Prüfpunkte werden beim Öffnen nur für dieses Prüfobjekt angelegt.','Checks are instantiated for this object only when opened.')}</p><div class="check-list">${applicable.map(c=>{const saved=defined.get(c.id),r=saved&&project.results[saved.id];return `<button onclick="openWalkCheck('${walk.id}','${asset.id}','${c.id}')"><strong>${esc(c[lang])}</strong><br><small>${esc(c.id)} · ${esc(r?.status||t('Nicht begonnen','Not started'))}</small></button>`}).join('')}</div></div>`:''}`:`<p class="note">${t('Neuen Begehung anlegen, um die tatsächlich vorhandenen Komponenten zu erfassen.','Create a walk and add the components actually present on site.')}</p>`}`;
 }
 function catalogManagerPage(){
  const exclusions=new Set(project.checkExclusions||[]);
