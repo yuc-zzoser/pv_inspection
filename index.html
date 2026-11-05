@@ -120,6 +120,68 @@ const walkKinds=[
 ];
 let selectedWalkId=null,selectedWalkAssetId=null;
 let walkDraft=null;
+
+function newWalk(){
+ walkDraft={step:1,name:'Station '+(walks().length+1),types:['trafo','wr'],names:{}};
+ go('walk');
+}
+function wizardRead(){
+ if(!walkDraft)return;
+ const name=document.getElementById('wizardName');
+ if(name)walkDraft.name=name.value;
+ if(walkDraft.step===1)walkDraft.types=walkKinds.filter(k=>document.getElementById('wizardType_'+k.id)?.checked).map(k=>k.id);
+ if(walkDraft.step===2)for(const id of walkDraft.types){
+  const field=document.getElementById('wizardNames_'+id);
+  if(field)walkDraft.names[id]=field.value;
+ }
+}
+function wizardMove(step){
+ wizardRead();
+ if(step>walkDraft.step){
+  if(walkDraft.step===1&&(!walkDraft.name.trim()||!walkDraft.types.length)){alert(t('Stationsname und Komponenten auswählen.','Enter a station name and select components.'));return}
+  if(walkDraft.step===2)for(const id of walkDraft.types){
+   const names=(walkDraft.names[id]||'').split(/[,;\n]+/).map(x=>x.trim()).filter(Boolean);
+   if(!names.length||new Set(names.map(x=>x.toLocaleLowerCase())).size!==names.length){alert(t('Bezeichnungen prüfen: ','Check designations: ')+id);return}
+  }
+ }
+ walkDraft.step=step;render();
+}
+function wizardCancel(){walkDraft=null;render()}
+function wizardFinish(){
+ wizardRead();
+ if(walkDraft.step!==3)return;
+ const name=walkDraft.name.trim();
+ if(!name||walks().some(w=>w.name.toLocaleLowerCase()===name.toLocaleLowerCase())){alert(t('Stationsname fehlt oder existiert bereits.','Station name missing or already exists.'));walkDraft.step=1;render();return}
+ const w={id:crypto.randomUUID(),name,assets:[],created:now()};
+ for(const id of walkDraft.types){
+  const kind=walkKinds.find(k=>k.id===id);
+  for(const label of (walkDraft.names[id]||'').split(/[,;\n]+/).map(x=>x.trim()).filter(Boolean)){
+   w.assets.push({id:crypto.randomUUID(),kind:id,name:label,area:kind.area,created:now()});
+  }
+  if(id==='trafo')project.config.trafo=true;
+ }
+ walks().push(w);selectedWalkId=w.id;selectedWalkAssetId=w.assets[0]?.id||null;
+ walkDraft=null;save();render();
+}
+function wizardPage(){
+ const w=walkDraft;
+ const progress=[1,2,3].map(i=>'<span style="display:block;flex:1;height:6px;border-radius:4px;background:'+(i<=w.step?'#008598':'#A6BBC8')+'"></span>').join('');
+ let body='';
+ if(w.step===1){
+  body='<label class="field"><span>'+t('Begehungsbereich','Station / walk')+'</span><input id="wizardName" value="'+esc(w.name)+'"></label><h2>'+t('Vorhandene Komponenten','Available components')+'</h2>';
+  body+=walkKinds.map(k=>'<label class="toggle" style="border-bottom:1px solid #A6BBC8;padding:7px 0"><input type="checkbox" id="wizardType_'+k.id+'" '+(w.types.includes(k.id)?'checked':'')+'><span>'+t(k.de,k.en)+'</span></label>').join('');
+ }else if(w.step===2){
+  body='<p class="muted">'+t('Bezeichnungen einmal eingeben, jeweils eine pro Zeile.','Enter names once, one per line.')+'</p>';
+  body+=w.types.map(id=>{const k=walkKinds.find(k=>k.id===id);return '<label class="field"><span>'+t(k.de,k.en)+'</span><textarea rows="3" id="wizardNames_'+id+'" placeholder="'+(id==='wr'?'WR3.5, WR3.7':id==='trafo'?'Trafo 3':t('Bezeichnung','Name'))+'">'+esc(w.names[id]||'')+'</textarea></label>'}).join('');
+ }else{
+  body='<h2>'+esc(w.name)+'</h2><p class="muted">'+t('Zusammenfassung prüfen. Reihenfolge später änderbar.','Review the list. Order may be changed later.')+'</p>';
+  body+=w.types.map(id=>{const k=walkKinds.find(k=>k.id===id);const names=(w.names[id]||'').split(/[,;\n]+/).map(x=>x.trim()).filter(Boolean);return '<div class="card"><strong>'+t(k.de,k.en)+'</strong><p>'+names.map(esc).join(' · ')+'</p></div>'}).join('');
+ }
+ const back=w.step===1?'wizardCancel()':'wizardMove('+(w.step-1)+')';
+ const next=w.step===3?'wizardFinish()':'wizardMove('+(w.step+1)+')';
+ return '<h1>'+t('Neue Begehung','New site walk')+'</h1><div class="card"><div class="row between"><strong>'+t('Schritt','Step')+' '+w.step+'/3</strong></div><div class="row" style="gap:6px;margin:12px 0 20px">'+progress+'</div>'+body+'<div class="row" style="margin-top:20px"><button onclick="'+back+'">'+(w.step===1?t('Abbrechen','Cancel'):t('Zurück','Back'))+'</button><button class="primary" onclick="'+next+'">'+(w.step===3?t('Begehung erstellen','Create walk'):t('Weiter','Continue'))+'</button></div></div>';
+}
+
 function renameWalk(id){const walk=walks().find(w=>w.id===id);if(!walk)return;const name=prompt(t('Begehung umbenennen','Rename walk'),walk.name);if(name?.trim()){walk.name=name.trim();for(const r of Object.values(project.results||{}))if(r.walkId===walk.id)r.part=walk.name;save();render()}}
 function addWalkAsset(){
  const walk=selectedWalk();if(!walk)return;
